@@ -4,3 +4,6 @@ target/
 # IntelliJ IDEA
 .idea/
 *.iml
+
+# Release notes
+RELEASE_MESSAGE.md
