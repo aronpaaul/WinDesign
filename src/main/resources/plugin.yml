@@ -1,0 +1,13 @@
+name: WinDesign
+version: '${project.version}'
+main: im.scaredead.windesign.WinDesign
+api-version: '1.16'
+depend:
+  - LuckPerms
+  - PlayerPoints
+commands:
+  windesign:
+  brackets:
+  prefix:
+  tag:
+  namecolor:

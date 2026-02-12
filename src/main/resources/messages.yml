@@ -1,0 +1,55 @@
+﻿# Сообщения плагина
+errors:
+  not-player: "WinDesign » Эта команда доступна только в игре."
+  invalid-command: "WinDesign » Неизвестная команда."
+  no-permission: "WinDesign » У вас нет прав."
+  tag-not-exists: "WinDesign » Тег с таким номером не существует."
+  brackets-not-exists: "WinDesign » Скобок с таким номером не существует."
+  not-enough-tokens: "&cУ вас недостаточно токенов! &fПополните их баланс на сайте\n &eWinMine.fun"
+  placeholderapi-missing: "WinDesign » PlaceholderAPI не найден. Плейсхолдеры Brackets не будут работать."
+
+success:
+  installed: "&fУстановлено %value%"
+  installed-color: "&fУстановлено %value%[ЦВЕТ]"
+  installed-empty: "&fУстановлено"
+  buy-success: "&fКуплено!"
+  buy-success-full: "&fПокупка успешна!"
+
+menu:
+  status:
+    available: "[Доступно]"
+    installed: "[Установлено]"
+    unavailable: "[Недоступно]"
+  hover:
+    install: "Нажмите чтобы установить"
+    reset: "Нажмите чтобы сбросить"
+    buy: "Нажмите чтобы купить"
+    only-for: "Доступно только для"
+  groups:
+    baron: " Барон"
+    strazh: " Страж"
+    hero: " Герой"
+    aspid: " Аспид"
+    squid: " Сквид"
+    glava: " Глава"
+    elite: " Элита"
+    titan: " Титан"
+    princ: " Принц"
+    knyaz: " Князь"
+    gercog: " Герцог"
+  labels:
+    buy: "[Цена: "
+    color: "[ЦВЕТ]"
+    color-line: "    [ЦВЕТ]"
+    dash: " - "
+    tokens: "ток"
+  format:
+    color-entry: "    &f%value%[ЦВЕТ] &f- "
+    value-entry: "    &f%value% &f- "
+  layout:
+    separator: "&c&l&m                                          &c"
+    header: "    &c&lВыберите дизайн:"
+    footer-1: "        &c&l•  •  •  •  •  •  •  •  •  •  •  •  •"
+    footer-2: "        &c&l&m                                    "
+    footer-3: "      &4&l*                                      &4&l*"
+    footer-4: "            &a&l&nУдачи вам, дорогие друзья!"
