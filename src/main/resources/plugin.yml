@@ -1,6 +1,6 @@
-name: WinDesign
+﻿name: WinDesign
 version: '${project.version}'
-main: im.scaredead.windesign.WinDesign
+main: im.paul.windesign.WinDesign
 api-version: '1.16'
 depend:
   - LuckPerms
@@ -11,3 +11,4 @@ commands:
   prefix:
   tag:
   namecolor:
+
