@@ -11,6 +11,13 @@ public final class BracketsActions {
     private BracketsActions() {
     }
 
+    private static int getRequiredSum(String basePath) {
+        if (WinDesign.getInstance().getConfig().contains(basePath + ".summa")) {
+            return WinDesign.getInstance().getConfig().getInt(basePath + ".summa");
+        }
+        return WinDesign.getInstance().getConfig().getInt(basePath + ".price");
+    }
+
     /**
      * Обрабатывает покупку, выбор и сброс скобок.
      *
@@ -23,7 +30,11 @@ public final class BracketsActions {
         if (args.length == 2 && args[0].equalsIgnoreCase("buybrackets")) {
             String key = args[1];
             if (WinDesign.getInstance().getConfig().contains("brackets." + key)) {
-                int requiredSum = WinDesign.getInstance().getConfig().getInt("brackets." + key + ".summa");
+                if (player.hasPermission("windesign.brackets." + key)) {
+                    messages.send(player, "errors.already-purchased");
+                    return true;
+                }
+                int requiredSum = getRequiredSum("brackets." + key);
                 if (WinDesign.getInstance().getPoints(player) >= requiredSum) {
                     WinDesign.getInstance().addPermission(player, "windesign.brackets." + key);
                     WinDesign.getInstance().takePoints(player, requiredSum);
@@ -57,7 +68,11 @@ public final class BracketsActions {
         if (args.length == 2 && args[0].equalsIgnoreCase("buybracketscolor")) {
             String key = args[1];
             if (WinDesign.getInstance().getConfig().contains("brackets-colors." + key)) {
-                int requiredSum = WinDesign.getInstance().getConfig().getInt("brackets-colors." + key + ".summa");
+                if (player.hasPermission("windesign.bracketscolor." + key)) {
+                    messages.send(player, "errors.already-purchased");
+                    return true;
+                }
+                int requiredSum = getRequiredSum("brackets-colors." + key);
                 if (WinDesign.getInstance().getPoints(player) >= requiredSum) {
                     WinDesign.getInstance().addPermission(player, "windesign.bracketscolor." + key);
                     WinDesign.getInstance().setPlayerBracketsColor(player, key);

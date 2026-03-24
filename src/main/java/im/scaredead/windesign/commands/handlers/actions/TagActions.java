@@ -11,6 +11,13 @@ public final class TagActions {
     private TagActions() {
     }
 
+    private static int getRequiredSum(String basePath) {
+        if (WinDesign.getInstance().getConfig().contains(basePath + ".summa")) {
+            return WinDesign.getInstance().getConfig().getInt(basePath + ".summa");
+        }
+        return WinDesign.getInstance().getConfig().getInt(basePath + ".price");
+    }
+
     /**
      * Обрабатывает покупку, выбор и сброс тегов.
      *
@@ -23,7 +30,11 @@ public final class TagActions {
         if (args.length == 2 && args[0].equalsIgnoreCase("buytag")) {
             String tagKey = args[1];
             if (WinDesign.getInstance().getConfig().contains("tags." + tagKey)) {
-                int requiredSum = WinDesign.getInstance().getConfig().getInt("tags." + tagKey + ".summa");
+                if (player.hasPermission("windesign.tag." + tagKey)) {
+                    messages.send(player, "errors.already-purchased");
+                    return true;
+                }
+                int requiredSum = getRequiredSum("tags." + tagKey);
                 if (WinDesign.getInstance().getPoints(player) >= requiredSum) {
                     WinDesign.getInstance().addPermission(player, "windesign.tag." + tagKey);
                     WinDesign.getInstance().setPlayerTag(player, tagKey);
@@ -61,7 +72,11 @@ public final class TagActions {
         if (args.length == 2 && args[0].equalsIgnoreCase("buytagcolor")) {
             String tagKey = args[1];
             if (WinDesign.getInstance().getConfig().contains("tags-colors." + tagKey)) {
-                int requiredSum = WinDesign.getInstance().getConfig().getInt("tags-colors." + tagKey + ".summa");
+                if (player.hasPermission("windesign.tagcolor." + tagKey)) {
+                    messages.send(player, "errors.already-purchased");
+                    return true;
+                }
+                int requiredSum = getRequiredSum("tags-colors." + tagKey);
                 if (WinDesign.getInstance().getPoints(player) >= requiredSum) {
                     WinDesign.getInstance().setPlayerTagColor(player, tagKey);
                     WinDesign.getInstance().addPermission(player, "windesign.tagcolor." + tagKey);

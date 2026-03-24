@@ -1,6 +1,10 @@
 package im.scaredead.windesign.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -35,6 +39,15 @@ public class Messages {
             this.plugin.saveResource("messages.yml", false);
         }
         this.config = YamlConfiguration.loadConfiguration(file);
+        try (InputStream stream = this.plugin.getResource("messages.yml")) {
+            if (stream != null) {
+                YamlConfiguration defaults = YamlConfiguration
+                        .loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
+                this.config.setDefaults(defaults);
+            }
+        } catch (IOException exception) {
+            this.plugin.getLogger().warning("Failed to load default messages.yml: " + exception.getMessage());
+        }
     }
 
     /**

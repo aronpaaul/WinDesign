@@ -5,6 +5,7 @@ errors:
   no-permission: "WinDesign » У вас нет прав."
   tag-not-exists: "WinDesign » Тег с таким номером не существует."
   brackets-not-exists: "WinDesign » Скобок с таким номером не существует."
+  already-purchased: "WinDesign » Этот товар уже куплен."
   not-enough-tokens: "&cУ вас недостаточно токенов! &fПополните их баланс на сайте\n &eWinMine.fun"
   placeholderapi-missing: "WinDesign » PlaceholderAPI не найден. Плейсхолдеры Brackets не будут работать."
 
