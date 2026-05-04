@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Утилита для загрузки и форматирования сообщений плагина из messages.yml.
  */
 public class Messages {
+    private static final Pattern HEX_PATTERN = Pattern.compile("(?i)&#([0-9a-f]{6})");
     private final JavaPlugin plugin;
     private FileConfiguration config;
 
@@ -67,7 +70,20 @@ public class Messages {
      * @return цветное сообщение
      */
     public String color(String key) {
-        return ChatColor.translateAlternateColorCodes('&', raw(key));
+        return colorize(raw(key));
+    }
+
+    /**
+     * Преобразует HEX и legacy-цвета в формат сообщений Bukkit.
+     *
+     * @param message исходная строка
+     * @return строка с применёнными цветами
+     */
+    public String colorize(String message) {
+        if (message == null) {
+            return "";
+        }
+        return ChatColor.translateAlternateColorCodes('&', applyHexColors(message));
     }
 
     /**
@@ -129,6 +145,21 @@ public class Messages {
         }
 
         return result;
+    }
+
+    private String applyHexColors(String message) {
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            StringBuilder replacement = new StringBuilder("§x");
+            for (int index = 0; index < hex.length(); index++) {
+                replacement.append('§').append(hex.charAt(index));
+            }
+            matcher.appendReplacement(buffer, Matcher.quoteReplacement(replacement.toString()));
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 }
 

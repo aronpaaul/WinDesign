@@ -1,13 +1,15 @@
 ﻿# Сообщения плагина
 errors:
-  not-player: "WinDesign » Эта команда доступна только в игре."
-  invalid-command: "WinDesign » Неизвестная команда."
-  no-permission: "WinDesign » У вас нет прав."
-  tag-not-exists: "WinDesign » Тег с таким номером не существует."
-  brackets-not-exists: "WinDesign » Скобок с таким номером не существует."
-  already-purchased: "WinDesign » Этот товар уже куплен."
-  not-enough-tokens: "&cУ вас недостаточно токенов! &fПополните их баланс на сайте\n &eWinMine.fun"
-  placeholderapi-missing: "WinDesign » PlaceholderAPI не найден. Плейсхолдеры Brackets не будут работать."
+  not-player: "Эта команда доступна только в игре."
+  invalid-command: "Неизвестная команда."
+  no-permission: "У вас нет прав."
+  tab-not-found: "Плагин TAB не найден или выключен."
+  tab-command-failed: "Не удалось применить титул в TAB. Проверьте, включено ли tablist-name-formatting."
+  tag-not-exists: "Тег с таким номером не существует."
+  brackets-not-exists: "Скобок с таким номером не существует."
+  already-purchased: "Этот товар уже куплен."
+  not-enough-tokens: "У вас недостаточно токенов! &fПополните их баланс на сайте\n &eWinMine.fun"
+  placeholderapi-missing: "PlaceholderAPI не найден. Плейсхолдеры Brackets не будут работать."
 
 success:
   installed: "&fУстановлено %value%"
@@ -15,6 +17,14 @@ success:
   installed-empty: "&fУстановлено"
   buy-success: "&fКуплено!"
   buy-success-full: "&fПокупка успешна!"
+
+admin-clear:
+  confirm: "&cВЫ реально уверены что хотите стереть данные типа &e%type%&c у игрока &e%target%&c? Повторите эту же команду в течение &e%seconds%&c сек."
+
+admin-tag:
+  usage: "&cИспользование: /windesign admin tag set <текст>"
+  empty: "&cУкажите текст кастомного титула для TAB."
+  success: "&fTAB-титул установлен: %value%"
 
 menu:
   status:
@@ -43,14 +53,14 @@ menu:
     color: "[ЦВЕТ]"
     color-line: "    [ЦВЕТ]"
     dash: " - "
-    tokens: "ток"
+    tokens: "ТК"
   format:
     color-entry: "    &f%value%[ЦВЕТ] &f- "
     value-entry: "    &f%value% &f- "
   layout:
     separator: "&c&l&m                                          &c"
-    header: "    &c&lВыберите дизайн:"
+    header: "    &c&lВыберите стиль:"
     footer-1: "        &c&l•  •  •  •  •  •  •  •  •  •  •  •  •"
     footer-2: "        &c&l&m                                    "
     footer-3: "      &4&l*                                      &4&l*"
-    footer-4: "            &a&l&nУдачи вам, дорогие друзья!"
+    footer-4: "            &a&l&nОткрой чат, смотри выше!"

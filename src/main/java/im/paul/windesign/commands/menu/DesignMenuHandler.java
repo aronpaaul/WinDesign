@@ -1,10 +1,16 @@
 package im.paul.windesign.commands.menu;
 
 import im.paul.windesign.WinDesign;
+import im.paul.windesign.util.ColorUtil;
+import im.paul.windesign.util.MenuSettings;
 import im.paul.windesign.util.Messages;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -15,7 +21,25 @@ import org.bukkit.entity.Player;
  * Построение и вывод интерактивных меню дизайна.
  */
 public final class DesignMenuHandler {
+    private static final List<String> NAME_COLOR_DEFAULT_KEYS = numericKeys(1, 10);
+    private static final List<String> PREFIX_DEFAULT_KEYS = Collections.unmodifiableList(Arrays.asList(
+            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+            "staff", "agent", "techadmin", "admin"
+    ));
+    private static final List<String> PREFIX_COLOR_DEFAULT_KEYS = numericKeys(1, 18);
+    private static final List<String> TAG_DEFAULT_KEYS = numericKeys(1, 32);
+    private static final List<String> TAG_COLOR_DEFAULT_KEYS = numericKeys(1, 17);
+    private static final List<String> BRACKETS_DEFAULT_KEYS = numericKeys(1, 16);
+    private static final List<String> BRACKETS_COLOR_DEFAULT_KEYS = numericKeys(1, 17);
+
     private DesignMenuHandler() {
+    }
+
+    private static int getCost(FileConfiguration config, String basePath) {
+        if (config.contains(basePath + ".summa")) {
+            return config.getInt(basePath + ".summa");
+        }
+        return config.getInt(basePath + ".price");
     }
 
     /**
@@ -26,1772 +50,420 @@ public final class DesignMenuHandler {
      * @return true если меню было показано, иначе false
      */
     public static boolean handle(Player player, String[] args) {
-        Messages messages = WinDesign.getInstance().getMessages();
-
-            TextComponent color1;
-               TextComponent color2;
-               TextComponent color3;
-               TextComponent color4;
-               TextComponent color5;
-               TextComponent color6;
-               TextComponent color7;
-               TextComponent color8;
-               TextComponent color9;
-               TextComponent color10;
-               FileConfiguration menuConfig;
-               String text5;
-               String text;
-               String text6;
-               String text1;
-               String text2;
-               if (args.length == 1 && args[0].equalsIgnoreCase("namecolor")) {
-                  if (player.hasPermission("windesign.namecolor.1")) {
-                     color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 1"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("1")) {
-                        color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color1 = (TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED);
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.2")) {
-                     color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 2"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("2")) {
-                        color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color2 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.baron")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.3")) {
-                     color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 3"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("3")) {
-                        color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color3 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.strazh")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.4")) {
-                     color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 4"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("4")) {
-                        color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color4 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.hero")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.5")) {
-                     color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 5"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("5")) {
-                        color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color5 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.aspid")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.6")) {
-                     color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 6"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("6")) {
-                        color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color6 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.squid")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.7")) {
-                     color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 7"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("7")) {
-                        color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color7 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.8")) {
-                     color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 8"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("8")) {
-                        color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color8 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.elite")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.9")) {
-                     color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 9"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("9")) {
-                        color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color9 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.titan")).color(NamedTextColor.WHITE)));
-                  }
-
-                  if (player.hasPermission("windesign.namecolor.10")) {
-                     color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign select 10"))).build();
-                     if (WinDesign.getInstance().getPlayerColorNumber(player).equals("10")) {
-                        color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign namecolor"))).build();
-                     }
-                  } else {
-                     color10 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.princ")).color(NamedTextColor.WHITE)));
-                  }
-
-                  player.sendMessage("");
-                  player.sendMessage(messages.color("menu.layout.separator"));
-                  player.sendMessage("");
-                  player.sendMessage(messages.color("menu.layout.header"));
-                  player.sendMessage("");
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.1"));
-                  player.sendMessage(Component.text(text).append(color1));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text2 = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.2"));
-                  player.sendMessage(Component.text(text2).append(color2));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  String text3 = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.3"));
-                  player.sendMessage(Component.text(text3).append(color3));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.4"));
-                  player.sendMessage(Component.text(text).append(color4));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text1 = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.5"));
-                  player.sendMessage(Component.text(text1).append(color5));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text2 = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.6"));
-                  player.sendMessage(Component.text(text2).append(color6));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.7"));
-                  player.sendMessage(Component.text(text).append(color7));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.8"));
-                  player.sendMessage(Component.text(text).append(color8));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text5 = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.9"));
-                  player.sendMessage(Component.text(text5).append(color9));
-                  menuConfig = WinDesign.getInstance().getConfig();
-                  text6 = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("name-colors.10"));
-                  player.sendMessage(Component.text(text6).append(color10));
-                  player.sendMessage("");
-                  player.sendMessage(messages.color("menu.layout.footer-1"));
-                  player.sendMessage(messages.color("menu.layout.footer-2"));
-                  player.sendMessage(messages.color("menu.layout.footer-3"));
-                  player.sendMessage(messages.color("menu.layout.footer-4"));
-                  player.sendMessage(messages.color("menu.layout.footer-3"));
-                  return true;
-               } else {
-                  TextComponent color11;
-                  TextComponent color12;
-                  if (args.length == 1 && args[0].equalsIgnoreCase("prefix")) {
-                     if (player.hasPermission("windesign.prefix.1")) {
-                        color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 1"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("1")) {
-                           color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color1 = (TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED);
-                     }
-
-                     if (player.hasPermission("windesign.prefix.2")) {
-                        color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 2"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("2")) {
-                           color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color2 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.baron")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.3")) {
-                        color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 3"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("3")) {
-                           color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color3 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.strazh")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.4")) {
-                        color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 4"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("4")) {
-                           color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color4 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.hero")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.5")) {
-                        color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 5"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("5")) {
-                           color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color5 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.aspid")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.6")) {
-                        color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 6"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("6")) {
-                           color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color6 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.squid")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.7")) {
-                        color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 7"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("7")) {
-                           color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color7 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.8")) {
-                        color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 8"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("8")) {
-                           color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color8 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.elite")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.9")) {
-                        color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 9"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("9")) {
-                           color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color9 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.titan")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.10")) {
-                        color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 10"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("10")) {
-                           color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color10 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.princ")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.11")) {
-                        color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 11"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("11")) {
-                           color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color11 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.knyaz")).color(NamedTextColor.WHITE)));
-                     }
-
-                     if (player.hasPermission("windesign.prefix.12")) {
-                        color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix 12"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("12")) {
-                           color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     } else {
-                        color12 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.gercog")).color(NamedTextColor.WHITE)));
-                     }
-
-                     TextComponent colorStaff = null;
-                     if (player.hasPermission("windesign.prefix.staff")) {
-                        colorStaff = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix staff"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("staff")) {
-                           colorStaff = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     }
-
-                     TextComponent colorAgent = null;
-                     if (player.hasPermission("windesign.prefix.agent")) {
-                        colorAgent = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix agent"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("agent")) {
-                           colorAgent = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     }
-
-                     TextComponent colorTechAdmin = null;
-                     if (player.hasPermission("windesign.prefix.techadmin")) {
-                        colorTechAdmin = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix techadmin"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("techadmin")) {
-                           colorTechAdmin = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     }
-
-                     TextComponent colorAdmin = null;
-                     if (player.hasPermission("windesign.prefix.admin")) {
-                        colorAdmin = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefix admin"))).build();
-                        if (WinDesign.getInstance().getPlayerPrefixNumber(player).equals("admin")) {
-                           colorAdmin = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefix"))).build();
-                        }
-                     }
-
-                     player.sendMessage("");
-                     player.sendMessage(messages.color("menu.layout.separator"));
-                     player.sendMessage("");
-                     player.sendMessage(messages.color("menu.layout.header"));
-                     player.sendMessage("");
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.1"));
-                     player.sendMessage(Component.text(text).append(color1));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text1 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.2"));
-                     player.sendMessage(Component.text(text1).append(color2));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text2 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.3"));
-                     player.sendMessage(Component.text(text2).append(color3));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.4"));
-                     player.sendMessage(Component.text(text).append(color4));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.5"));
-                     player.sendMessage(Component.text(text).append(color5));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text5 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.6"));
-                     player.sendMessage(Component.text(text5).append(color6));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     text6 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.7"));
-                     player.sendMessage(Component.text(text6).append(color7));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     String text7 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.8"));
-                     player.sendMessage(Component.text(text7).append(color8));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     String text8 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.9"));
-                     player.sendMessage(Component.text(text8).append(color9));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     String text9 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.10"));
-                     player.sendMessage(Component.text(text9).append(color10));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     String text10 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.11"));
-                     player.sendMessage(Component.text(text10).append(color11));
-                     menuConfig = WinDesign.getInstance().getConfig();
-                     String text11 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.12"));
-                     player.sendMessage(Component.text(text11).append(color12));
-                     if (colorStaff != null) {
-                        menuConfig = WinDesign.getInstance().getConfig();
-                        String text12 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.staff"));
-                        player.sendMessage(Component.text(text12).append(colorStaff));
-                     }
-                     if (colorAgent != null) {
-                        menuConfig = WinDesign.getInstance().getConfig();
-                        String text13 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.agent"));
-                        player.sendMessage(Component.text(text13).append(colorAgent));
-                     }
-                     if (colorTechAdmin != null) {
-                        menuConfig = WinDesign.getInstance().getConfig();
-                        String text14 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.techadmin"));
-                        player.sendMessage(Component.text(text14).append(colorTechAdmin));
-                     }
-                     if (colorAdmin != null) {
-                        menuConfig = WinDesign.getInstance().getConfig();
-                        String text15 = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("prefix.admin"));
-                        player.sendMessage(Component.text(text15).append(colorAdmin));
-                     }
-                     player.sendMessage(messages.color("menu.layout.footer-1"));
-                     player.sendMessage(messages.color("menu.layout.footer-2"));
-                     player.sendMessage(messages.color("menu.layout.footer-3"));
-                     player.sendMessage(messages.color("menu.layout.footer-4"));
-                     player.sendMessage(messages.color("menu.layout.footer-3"));
-                     return true;
-                  } else {
-                     TextComponent color13;
-                     TextComponent color14;
-                     TextComponent color15;
-                     TextComponent color16;
-                     TextComponent color17;
-                     TextComponent color18;
-                     if (args.length == 1 && args[0].equalsIgnoreCase("prefixcolor")) {
-                        if (player.hasPermission("windesign.prefixcolor.1")) {
-                           color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 1"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("1")) {
-                              color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color1 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.2")) {
-                           color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 2"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("2")) {
-                              color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color2 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.3")) {
-                           color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 3"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("3")) {
-                              color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color3 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.4")) {
-                           color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 4"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("4")) {
-                              color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color4 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.5")) {
-                           color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 5"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("5")) {
-                              color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color5 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.6")) {
-                           color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 6"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("6")) {
-                              color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color6 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.7")) {
-                           color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 7"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("7")) {
-                              color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color7 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.8")) {
-                           color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 8"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("8")) {
-                              color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color8 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.9")) {
-                           color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 9"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("9")) {
-                              color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color9 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.10")) {
-                           color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 10"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("10")) {
-                              color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color10 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.11")) {
-                           color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 11"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("11")) {
-                              color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color11 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.12")) {
-                           color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 12"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("12")) {
-                              color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color12 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.13")) {
-                           color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 13"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("13")) {
-                              color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color13 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.14")) {
-                           color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 14"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("14")) {
-                              color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color14 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.15")) {
-                           color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 15"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("15")) {
-                              color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color15 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.glava")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.16")) {
-                           color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 16"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("16")) {
-                              color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color16 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.titan")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.17")) {
-                           color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 17"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("17")) {
-                              color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color17 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.knyaz")).color(NamedTextColor.WHITE)));
-                        }
-
-                        if (player.hasPermission("windesign.prefixcolor.18")) {
-                           color18 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectprefixcolor 18"))).build();
-                           if (WinDesign.getInstance().getPlayerPrefixColorNumber(player).equals("18")) {
-                              color18 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign prefixcolor"))).build();
-                           }
-                        } else {
-                           color18 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.gercog")).color(NamedTextColor.WHITE)));
-                        }
-
-                        player.sendMessage("");
-                        player.sendMessage(messages.color("menu.layout.separator"));
-                        player.sendMessage("");
-                        player.sendMessage(messages.color("menu.layout.header"));
-                        player.sendMessage("");
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(255, 255, 255))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color1));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(255, 255, 255))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color2));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(210, 209, 254))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color3));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(163, 231, 196))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color4));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(66, 229, 214))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color5));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(0, 254, 244))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color6));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(0, 184, 254))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color7));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(104, 153, 244))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color8));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(255, 131, 83))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color9));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(255, 196, 0))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color10));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(227, 255, 0))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color11));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(92, 255, 0))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color12));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(0, 255, 118))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color13));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(0, 58, 255))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color14));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(129, 0, 255))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color15));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(255, 0, 175))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color16));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(254, 0, 45))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color17));
-                        player.sendMessage(((TextComponent)((TextComponent)Component.text(messages.raw("menu.labels.color-line")).color(TextColor.color(194, 0, 0))).append(Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255)))).append(color18));
-                        player.sendMessage("");
-                        player.sendMessage(messages.color("menu.layout.footer-1"));
-                        player.sendMessage(messages.color("menu.layout.footer-2"));
-                        player.sendMessage(messages.color("menu.layout.footer-3"));
-                        player.sendMessage(messages.color("menu.layout.footer-4"));
-                        player.sendMessage(messages.color("menu.layout.footer-3"));
-                        return true;
-                     } else {
-                        TextComponent buyPriceLabel;
-                        if (args.length == 1 && args[0].equalsIgnoreCase("tags")) {
-                           if (player.hasPermission("windesign.tag.1")) {
-                              color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 1"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("1")) {
-                                 color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color1 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.1.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 1"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.2")) {
-                              color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 2"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("2")) {
-                                 color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color2 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.2.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 2"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.3")) {
-                              color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 3"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("3")) {
-                                 color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color3 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.3.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 3"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.4")) {
-                              color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 4"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("4")) {
-                                 color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color4 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.4.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 4"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.5")) {
-                              color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 5"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("5")) {
-                                 color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color5 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.5.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 5"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.6")) {
-                              color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 6"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("6")) {
-                                 color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color6 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.6.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 6"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.7")) {
-                              color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 7"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("7")) {
-                                 color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color7 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.7.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 7"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.8")) {
-                              color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 8"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("8")) {
-                                 color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color8 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.8.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 8"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.9")) {
-                              color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 9"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("9")) {
-                                 color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color9 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.9.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 9"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.10")) {
-                              color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 10"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("10")) {
-                                 color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color10 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.10.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 10"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.11")) {
-                              color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 11"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("11")) {
-                                 color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color11 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.11.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 11"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.12")) {
-                              color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 12"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("12")) {
-                                 color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color12 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.12.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 12"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.13")) {
-                              color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 13"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("13")) {
-                                 color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color13 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.13.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 13"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.14")) {
-                              color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 14"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("14")) {
-                                 color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color14 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.14.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 14"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.15")) {
-                              color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 15"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("15")) {
-                                 color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color15 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.15.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 15"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.16")) {
-                              color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 16"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("16")) {
-                                 color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color16 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.16.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 16"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.17")) {
-                              color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 17"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("17")) {
-                                 color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color17 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.17.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 17"));
-                           }
-
-                           if (player.hasPermission("windesign.tag.18")) {
-                              color18 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 18"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("18")) {
-                                 color18 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color18 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.18.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 18"));
-                           }
-
-                           TextComponent color19;
-                           if (player.hasPermission("windesign.tag.19")) {
-                              color19 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 19"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("19")) {
-                                 color19 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color19 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.19.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 19"));
-                           }
-
-                           TextComponent color20;
-                           if (player.hasPermission("windesign.tag.20")) {
-                              color20 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 20"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("20")) {
-                                 color20 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color20 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.20.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 20"));
-                           }
-
-                           TextComponent color21;
-                           if (player.hasPermission("windesign.tag.21")) {
-                              color21 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 21"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("21")) {
-                                 color21 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color21 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.21.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 21"));
-                           }
-
-                           TextComponent color22;
-                           if (player.hasPermission("windesign.tag.22")) {
-                              color22 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 22"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("22")) {
-                                 color22 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color22 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.22.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 22"));
-                           }
-
-                           TextComponent color23;
-                           if (player.hasPermission("windesign.tag.23")) {
-                              color23 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 23"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("23")) {
-                                 color23 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color23 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.23.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 23"));
-                           }
-
-                           TextComponent color24;
-                           if (player.hasPermission("windesign.tag.24")) {
-                              color24 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 24"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("24")) {
-                                 color24 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color24 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.24.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 24"));
-                           }
-
-                           TextComponent color25;
-                           if (player.hasPermission("windesign.tag.25")) {
-                              color25 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 25"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("25")) {
-                                 color25 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color25 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.25.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 25"));
-                           }
-
-                           TextComponent color26;
-                           if (player.hasPermission("windesign.tag.26")) {
-                              color26 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 26"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("26")) {
-                                 color26 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color26 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.26.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 26"));
-                           }
-
-                           TextComponent color27;
-                           if (player.hasPermission("windesign.tag.27")) {
-                              color27 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 27"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("27")) {
-                                 color27 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color27 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.27.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 27"));
-                           }
-
-                           TextComponent color28;
-                           if (player.hasPermission("windesign.tag.28")) {
-                              color28 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 28"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("28")) {
-                                 color28 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color28 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.28.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 28"));
-                           }
-
-                           TextComponent color29;
-                           if (player.hasPermission("windesign.tag.29")) {
-                              color29 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 29"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("29")) {
-                                 color29 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color29 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.29.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 29"));
-                           }
-
-                           TextComponent color30;
-                           if (player.hasPermission("windesign.tag.30")) {
-                              color30 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 30"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("30")) {
-                                 color30 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color30 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.30.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 30"));
-                           }
-
-                           TextComponent color31;
-                           if (player.hasPermission("windesign.tag.31")) {
-                              color31 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttag 31"))).build();
-                              if (WinDesign.getInstance().getPlayerTagNumber(player).equals("31")) {
-                                 color31 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tag"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color31 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags.31.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytag 31"));
-                           }
-
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.separator"));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.header"));
-                           player.sendMessage("");
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.1.name"));
-                           player.sendMessage(Component.text(text).append(color1));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.2.name"));
-                           player.sendMessage(Component.text(text).append(color2));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.3.name"));
-                           player.sendMessage(Component.text(text).append(color3));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.4.name"));
-                           player.sendMessage(Component.text(text).append(color4));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.5.name"));
-                           player.sendMessage(Component.text(text).append(color5));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.6.name"));
-                           player.sendMessage(Component.text(text).append(color6));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.7.name"));
-                           player.sendMessage(Component.text(text).append(color7));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.8.name"));
-                           player.sendMessage(Component.text(text).append(color8));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.9.name"));
-                           player.sendMessage(Component.text(text).append(color9));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.10.name"));
-                           player.sendMessage(Component.text(text).append(color10));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.11.name"));
-                           player.sendMessage(Component.text(text).append(color11));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.12.name"));
-                           player.sendMessage(Component.text(text).append(color12));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.13.name"));
-                           player.sendMessage(Component.text(text).append(color13));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.14.name"));
-                           player.sendMessage(Component.text(text).append(color14));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.15.name"));
-                           player.sendMessage(Component.text(text).append(color15));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.16.name"));
-                           player.sendMessage(Component.text(text).append(color16));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.17.name"));
-                           player.sendMessage(Component.text(text).append(color17));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.18.name"));
-                           player.sendMessage(Component.text(text).append(color18));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.19.name"));
-                           player.sendMessage(Component.text(text).append(color19));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.20.name"));
-                           player.sendMessage(Component.text(text).append(color20));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.21.name"));
-                           player.sendMessage(Component.text(text).append(color21));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.22.name"));
-                           player.sendMessage(Component.text(text).append(color22));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.23.name"));
-                           player.sendMessage(Component.text(text).append(color23));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.24.name"));
-                           player.sendMessage(Component.text(text).append(color24));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.25.name"));
-                           player.sendMessage(Component.text(text).append(color25));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.26.name"));
-                           player.sendMessage(Component.text(text).append(color26));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.27.name"));
-                           player.sendMessage(Component.text(text).append(color27));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.28.name"));
-                           player.sendMessage(Component.text(text).append(color28));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.29.name"));
-                           player.sendMessage(Component.text(text).append(color29));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.30.name"));
-                           player.sendMessage(Component.text(text).append(color30));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.value-entry", "%value%", menuConfig.getString("tags.31.name"));
-                           player.sendMessage(Component.text(text).append(color31));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.footer-1"));
-                           player.sendMessage(messages.color("menu.layout.footer-2"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           player.sendMessage(messages.color("menu.layout.footer-4"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           return true;
-                        } else if (args.length == 1 && args[0].equalsIgnoreCase("tagscolor")) {
-                           if (player.hasPermission("windesign.tagcolor.1")) {
-                              color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 1"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("1")) {
-                                 color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color1 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.1.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 1"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.2")) {
-                              color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 2"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("2")) {
-                                 color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color2 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.2.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 2"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.3")) {
-                              color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 3"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("3")) {
-                                 color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color3 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.3.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 3"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.4")) {
-                              color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 4"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("4")) {
-                                 color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color4 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.4.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 4"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.5")) {
-                              color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 5"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("5")) {
-                                 color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color5 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.5.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 5"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.6")) {
-                              color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 6"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("6")) {
-                                 color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color6 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.6.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 6"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.7")) {
-                              color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 7"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("7")) {
-                                 color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color7 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.7.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 7"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.8")) {
-                              color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 8"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("8")) {
-                                 color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color8 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.8.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 8"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.9")) {
-                              color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 9"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("9")) {
-                                 color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color9 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.9.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 9"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.10")) {
-                              color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 10"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("10")) {
-                                 color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color10 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.10.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 10"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.11")) {
-                              color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 11"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("11")) {
-                                 color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color11 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.11.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 11"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.12")) {
-                              color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 12"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("12")) {
-                                 color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color12 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.12.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 12"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.13")) {
-                              color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 13"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("13")) {
-                                 color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color13 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.13.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 13"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.14")) {
-                              color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 14"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("14")) {
-                                 color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color14 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.14.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 14"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.15")) {
-                              color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 15"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("15")) {
-                                 color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color15 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.15.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 15"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.16")) {
-                              color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 16"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("16")) {
-                                 color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color16 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.16.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 16"));
-                           }
-
-                           if (player.hasPermission("windesign.tagcolor.17")) {
-                              color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selecttagcolor 17"))).build();
-                              if (WinDesign.getInstance().getPlayerTagColorNumber(player).equals("17")) {
-                                 color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign tagcolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color17 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("tags-colors.17.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buytagcolor 17"));
-                           }
-
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.separator"));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.header"));
-                           player.sendMessage("");
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.1.color"));
-                           player.sendMessage(Component.text(text).append(color1));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.2.color"));
-                           player.sendMessage(Component.text(text).append(color2));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.3.color"));
-                           player.sendMessage(Component.text(text).append(color3));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.4.color"));
-                           player.sendMessage(Component.text(text).append(color4));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.5.color"));
-                           player.sendMessage(Component.text(text).append(color5));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.6.color"));
-                           player.sendMessage(Component.text(text).append(color6));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.7.color"));
-                           player.sendMessage(Component.text(text).append(color7));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.8.color"));
-                           player.sendMessage(Component.text(text).append(color8));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.9.color"));
-                           player.sendMessage(Component.text(text).append(color9));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.10.color"));
-                           player.sendMessage(Component.text(text).append(color10));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.11.color"));
-                           player.sendMessage(Component.text(text).append(color11));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.12.color"));
-                           player.sendMessage(Component.text(text).append(color12));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.13.color"));
-                           player.sendMessage(Component.text(text).append(color13));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.14.color"));
-                           player.sendMessage(Component.text(text).append(color14));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.15.color"));
-                           player.sendMessage(Component.text(text).append(color15));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.16.color"));
-                           player.sendMessage(Component.text(text).append(color16));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.17.color"));
-                           player.sendMessage(Component.text(text).append(color17));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.footer-1"));
-                           player.sendMessage(messages.color("menu.layout.footer-2"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           player.sendMessage(messages.color("menu.layout.footer-4"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           return true;
-                        } else if (args.length == 1 && args[0].equalsIgnoreCase("brackets")) {
-                           if (player.hasPermission("windesign.brackets.1")) {
-                              color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 1"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("1")) {
-                                 color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color1 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.1.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 1"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.2")) {
-                              color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 2"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("2")) {
-                                 color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color2 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.2.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 2"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.3")) {
-                              color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 3"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("3")) {
-                                 color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color3 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.3.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 3"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.4")) {
-                              color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 4"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("4")) {
-                                 color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color4 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.4.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 4"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.5")) {
-                              color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 5"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("5")) {
-                                 color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color5 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.5.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 5"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.6")) {
-                              color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 6"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("6")) {
-                                 color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color6 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.6.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 6"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.7")) {
-                              color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 7"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("7")) {
-                                 color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color7 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.7.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 7"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.8")) {
-                              color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 8"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("8")) {
-                                 color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color8 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.8.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 8"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.9")) {
-                              color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 9"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("9")) {
-                                 color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color9 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.9.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 9"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.10")) {
-                              color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 10"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("10")) {
-                                 color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color10 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.10.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 10"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.11")) {
-                              color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 11"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("11")) {
-                                 color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color11 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.11.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 11"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.12")) {
-                              color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 12"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("12")) {
-                                 color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color12 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.12.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 12"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.13")) {
-                              color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 13"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("13")) {
-                                 color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color13 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.13.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 13"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.14")) {
-                              color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 14"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("14")) {
-                                 color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color14 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets.14.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybrackets 14"));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.15")) {
-                              color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 15"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("15")) {
-                                 color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              color15 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.gercog")).color(NamedTextColor.WHITE)));
-                           }
-
-                           if (player.hasPermission("windesign.brackets.16")) {
-                              color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbrackets 16"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsNumber(player).equals("16")) {
-                                 color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign brackets"))).build();
-                              }
-                           } else {
-                              color16 = (TextComponent)((TextComponent)Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED)).hoverEvent(((TextComponent)Component.text(messages.raw("menu.hover.only-for")).color(NamedTextColor.RED)).append(Component.text(messages.raw("menu.groups.gercog")).color(NamedTextColor.WHITE)));
-                           }
-
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.separator"));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.header"));
-                           player.sendMessage("");
-                           String var50 = WinDesign.getInstance().getConfig().getString("brackets.1.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.1.right"));
-                           player.sendMessage(Component.text(text).append(color1));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.2.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.2.right"));
-                           player.sendMessage(Component.text(text).append(color2));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.3.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.3.right"));
-                           player.sendMessage(Component.text(text).append(color3));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.4.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.4.right"));
-                           player.sendMessage(Component.text(text).append(color4));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.5.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.5.right"));
-                           player.sendMessage(Component.text(text).append(color5));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.6.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.6.right"));
-                           player.sendMessage(Component.text(text).append(color6));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.7.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.7.right"));
-                           player.sendMessage(Component.text(text).append(color7));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.8.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.8.right"));
-                           player.sendMessage(Component.text(text).append(color8));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.9.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.9.right"));
-                           player.sendMessage(Component.text(text).append(color9));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.10.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.10.right"));
-                           player.sendMessage(Component.text(text).append(color10));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.11.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.11.right"));
-                           player.sendMessage(Component.text(text).append(color11));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.12.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.12.right"));
-                           player.sendMessage(Component.text(text).append(color12));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.13.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.13.right"));
-                           player.sendMessage(Component.text(text).append(color13));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.14.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.14.right"));
-                           player.sendMessage(Component.text(text).append(color14));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.15.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.15.right"));
-                           player.sendMessage(Component.text(text).append(color15));
-                           var50 = WinDesign.getInstance().getConfig().getString("brackets.16.left");
-                           text = messages.format("menu.format.value-entry", "%value%", var50 + WinDesign.getInstance().getConfig().getString("brackets.16.right"));
-                           player.sendMessage(Component.text(text).append(color16));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.footer-1"));
-                           player.sendMessage(messages.color("menu.layout.footer-2"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           player.sendMessage(messages.color("menu.layout.footer-4"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           return true;
-                        } else if (args.length == 1 && args[0].equalsIgnoreCase("bracketscolor")) {
-                           if (player.hasPermission("windesign.bracketscolor.1")) {
-                              color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 1"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("1")) {
-                                 color1 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color1 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.1.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 1"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.2")) {
-                              color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 2"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("2")) {
-                                 color2 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color2 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.2.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 2"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.3")) {
-                              color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 3"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("3")) {
-                                 color3 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color3 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.3.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 3"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.4")) {
-                              color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 4"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("4")) {
-                                 color4 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color4 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.4.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 4"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.5")) {
-                              color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 5"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("5")) {
-                                 color5 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color5 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.5.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 5"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.6")) {
-                              color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 6"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("6")) {
-                                 color6 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color6 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.6.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 6"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.7")) {
-                              color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 7"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("7")) {
-                                 color7 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color7 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.7.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 7"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.8")) {
-                              color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 8"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("8")) {
-                                 color8 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color8 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.8.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 8"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.9")) {
-                              color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 9"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("9")) {
-                                 color9 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color9 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.9.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 9"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.10")) {
-                              color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 10"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("10")) {
-                                 color10 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color10 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.10.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 10"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.11")) {
-                              color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 11"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("11")) {
-                                 color11 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color11 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.11.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 11"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.12")) {
-                              color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 12"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("12")) {
-                                 color12 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color12 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.12.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 12"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.13")) {
-                              color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 13"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("13")) {
-                                 color13 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color13 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.13.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 13"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.14")) {
-                              color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 14"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("14")) {
-                                 color14 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color14 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.14.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 14"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.15")) {
-                              color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 15"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("15")) {
-                                 color15 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color15 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.15.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 15"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.16")) {
-                              color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 16"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("16")) {
-                                 color16 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color16 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.16.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 16"));
-                           }
-
-                           if (player.hasPermission("windesign.bracketscolor.17")) {
-                              color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.available")).color(NamedTextColor.YELLOW)).hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign selectbracketscolor 17"))).build();
-                              if (WinDesign.getInstance().getPlayerBracketsColorNumber(player).equals("17")) {
-                                 color17 = (TextComponent)((Builder)((Builder)((Builder)Component.text().content(messages.raw("menu.status.installed")).color(NamedTextColor.GREEN)).hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))).clickEvent(ClickEvent.runCommand("/windesign deldesign bracketscolor"))).build();
-                              }
-                           } else {
-                              buyPriceLabel = (TextComponent)Component.text(messages.raw("menu.labels.buy")).color(NamedTextColor.GOLD);
-                              menuConfig = WinDesign.getInstance().getConfig();
-                              color17 = (TextComponent)((TextComponent)((TextComponent)((TextComponent)buyPriceLabel.append(Component.text(menuConfig.getInt("brackets-colors.17.price") + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))).append(Component.text("]").color(NamedTextColor.GOLD))).hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))).clickEvent(ClickEvent.runCommand("/windesign buybracketscolor 17"));
-                           }
-
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.separator"));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.header"));
-                           player.sendMessage("");
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.1.color"));
-                           player.sendMessage(Component.text(text).append(color1));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.2.color"));
-                           player.sendMessage(Component.text(text).append(color2));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.3.color"));
-                           player.sendMessage(Component.text(text).append(color3));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.4.color"));
-                           player.sendMessage(Component.text(text).append(color4));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.5.color"));
-                           player.sendMessage(Component.text(text).append(color5));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.6.color"));
-                           player.sendMessage(Component.text(text).append(color6));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.7.color"));
-                           player.sendMessage(Component.text(text).append(color7));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.8.color"));
-                           player.sendMessage(Component.text(text).append(color8));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.9.color"));
-                           player.sendMessage(Component.text(text).append(color9));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.10.color"));
-                           player.sendMessage(Component.text(text).append(color10));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.11.color"));
-                           player.sendMessage(Component.text(text).append(color11));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.12.color"));
-                           player.sendMessage(Component.text(text).append(color12));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.13.color"));
-                           player.sendMessage(Component.text(text).append(color13));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.14.color"));
-                           player.sendMessage(Component.text(text).append(color14));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.15.color"));
-                           player.sendMessage(Component.text(text).append(color15));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.16.color"));
-                           player.sendMessage(Component.text(text).append(color16));
-                           menuConfig = WinDesign.getInstance().getConfig();
-                           text = messages.format("menu.format.color-entry", "%value%", menuConfig.getString("tags-colors.17.color"));
-                           player.sendMessage(Component.text(text).append(color17));
-                           player.sendMessage("");
-                           player.sendMessage(messages.color("menu.layout.footer-1"));
-                           player.sendMessage(messages.color("menu.layout.footer-2"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           player.sendMessage(messages.color("menu.layout.footer-4"));
-                           player.sendMessage(messages.color("menu.layout.footer-3"));
-                           return true;
-                        } else {
-                           return false;
-                        }
-                     }
-                  }
-               }
-               }
+        if (args.length != 1) {
+            return false;
+        }
+
+        WinDesign plugin = WinDesign.getInstance();
+        Messages messages = plugin.getMessages();
+        FileConfiguration config = plugin.getConfig();
+        MenuSettings menuSettings = plugin.getMenuSettings();
+
+        String menuType = menuSettings.normalizeDesignType(args[0]);
+        if (menuType == null) {
+            return false;
+        }
+
+        if (menuType.equals("namecolor")) {
+            renderNameColorMenu(player, messages, config, menuSettings);
+            return true;
+        }
+        if (menuType.equals("prefix")) {
+            renderPrefixMenu(player, messages, config, menuSettings);
+            return true;
+        }
+        if (menuType.equals("prefixcolor")) {
+            renderPrefixColorMenu(player, messages, config, menuSettings);
+            return true;
+        }
+        if (menuType.equals("tags")) {
+            renderTagsMenu(player, messages, config, menuSettings);
+            return true;
+        }
+        if (menuType.equals("tagscolor")) {
+            renderTagsColorMenu(player, messages, config, menuSettings);
+            return true;
+        }
+        if (menuType.equals("brackets")) {
+            renderBracketsMenu(player, messages, config, menuSettings);
+            return true;
+        }
+        if (menuType.equals("bracketscolor")) {
+            renderBracketsColorMenu(player, messages, config, menuSettings);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void renderNameColorMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("namecolor", NAME_COLOR_DEFAULT_KEYS),
+                config,
+                "name-colors.",
+                ""
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerColorNumber(player));
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            String permission = "windesign.namecolor." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign select " + key,
+                        "/windesign deldesign namecolor"
+                );
+            } else {
+                status = unavailableStatus(messages);
+            }
+
+            String value = safe(config.getString("name-colors." + key));
+            String line = messages.format("menu.format.color-entry", "%value%", value);
+            player.sendMessage(Component.text(line).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static void renderPrefixMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("prefix", PREFIX_DEFAULT_KEYS),
+                config,
+                "prefix.",
+                ""
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerPrefixNumber(player));
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            String permission = "windesign.prefix." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign selectprefix " + key,
+                        "/windesign deldesign prefix"
+                );
+            } else {
+                status = unavailableStatus(messages);
+            }
+
+            String value = safe(config.getString("prefix." + key));
+            String line = messages.format("menu.format.value-entry", "%value%", value);
+            player.sendMessage(Component.text(line).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static void renderPrefixColorMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("prefixcolor", PREFIX_COLOR_DEFAULT_KEYS),
+                config,
+                "prefix-colors.",
+                ""
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerPrefixColorNumber(player));
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            String permission = "windesign.prefixcolor." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign selectprefixcolor " + key,
+                        "/windesign deldesign prefixcolor"
+                );
+            } else {
+                status = unavailableStatus(messages);
+            }
+
+            TextColor lineColor = resolveTextColor(config.getString("prefix-colors." + key));
+            TextComponent colorLabel = Component.text(messages.raw("menu.labels.color-line")).color(lineColor);
+            TextComponent dash = Component.text(messages.raw("menu.labels.dash")).color(TextColor.color(255, 255, 255));
+            player.sendMessage(colorLabel.append(dash).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static void renderTagsMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("tags", TAG_DEFAULT_KEYS),
+                config,
+                "tags.",
+                ".name"
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerTagNumber(player));
+        String tag31Name = safe(config.getString("tags.31.name"));
+        String tag32Name = safe(config.getString("tags.32.name"));
+        boolean hideTag32 = !tag31Name.isEmpty() && tag31Name.equalsIgnoreCase(tag32Name);
+
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            if (hideTag32 && key.equals("32")) {
+                continue;
+            }
+
+            String basePath = "tags." + key;
+            String permission = "windesign.tag." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign selecttag " + key,
+                        "/windesign deldesign tag"
+                );
+            } else {
+                int cost = getCost(config, basePath);
+                status = buyStatus(messages, cost, "/windesign buytag " + key);
+            }
+
+            String value = safe(config.getString(basePath + ".name"));
+            String line = messages.format("menu.format.value-entry", "%value%", value);
+            player.sendMessage(Component.text(line).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static void renderTagsColorMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("tagscolor", TAG_COLOR_DEFAULT_KEYS),
+                config,
+                "tags-colors.",
+                ".color"
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerTagColorNumber(player));
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            String basePath = "tags-colors." + key;
+            String permission = "windesign.tagcolor." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign selecttagcolor " + key,
+                        "/windesign deldesign tagcolor"
+                );
+            } else {
+                int cost = getCost(config, basePath);
+                status = buyStatus(messages, cost, "/windesign buytagcolor " + key);
+            }
+
+            String value = safe(config.getString(basePath + ".color"));
+            String line = messages.format("menu.format.color-entry", "%value%", value);
+            player.sendMessage(Component.text(line).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static void renderBracketsMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("brackets", BRACKETS_DEFAULT_KEYS),
+                config,
+                "brackets.",
+                ".left"
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerBracketsNumber(player));
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            String basePath = "brackets." + key;
+            String permission = "windesign.brackets." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign selectbrackets " + key,
+                        "/windesign deldesign brackets"
+                );
+            } else {
+                int cost = getCost(config, basePath);
+                status = buyStatus(messages, cost, "/windesign buybrackets " + key);
+            }
+
+            String value = safe(config.getString(basePath + ".left")) + safe(config.getString(basePath + ".right"));
+            String line = messages.format("menu.format.value-entry", "%value%", value);
+            player.sendMessage(Component.text(line).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static void renderBracketsColorMenu(Player player, Messages messages, FileConfiguration config, MenuSettings menuSettings) {
+        List<String> orderedKeys = filterValidKeys(
+                menuSettings.resolveSlots("bracketscolor", BRACKETS_COLOR_DEFAULT_KEYS),
+                config,
+                "brackets-colors.",
+                ".color"
+        );
+
+        String selected = safe(WinDesign.getInstance().getPlayerBracketsColorNumber(player));
+        sendHeader(player, messages);
+        for (String key : orderedKeys) {
+            String basePath = "brackets-colors." + key;
+            String permission = "windesign.bracketscolor." + key;
+            TextComponent status;
+            if (player.hasPermission(permission)) {
+                status = selectableStatus(
+                        messages,
+                        selected.equalsIgnoreCase(key),
+                        "/windesign selectbracketscolor " + key,
+                        "/windesign deldesign bracketscolor"
+                );
+            } else {
+                int cost = getCost(config, basePath);
+                status = buyStatus(messages, cost, "/windesign buybracketscolor " + key);
+            }
+
+            String value = safe(config.getString(basePath + ".color"));
+            String line = messages.format("menu.format.color-entry", "%value%", value);
+            player.sendMessage(Component.text(line).append(status));
+        }
+        sendFooter(player, messages);
+    }
+
+    private static List<String> filterValidKeys(List<String> keys, FileConfiguration config, String prefixPath, String suffixPath) {
+        List<String> filtered = new ArrayList<>();
+        for (String key : keys) {
+            String normalizedKey = safe(key).toLowerCase(Locale.ROOT);
+            if (normalizedKey.isEmpty()) {
+                continue;
+            }
+
+            String path = prefixPath + normalizedKey + suffixPath;
+            if (!config.contains(path)) {
+                continue;
+            }
+
+            if (!filtered.contains(normalizedKey)) {
+                filtered.add(normalizedKey);
+            }
+        }
+        return filtered;
+    }
+
+    private static void sendHeader(Player player, Messages messages) {
+        player.sendMessage("");
+        player.sendMessage(messages.color("menu.layout.separator"));
+        player.sendMessage("");
+        player.sendMessage(messages.color("menu.layout.header"));
+        player.sendMessage("");
+    }
+
+    private static void sendFooter(Player player, Messages messages) {
+        player.sendMessage("");
+        player.sendMessage(messages.color("menu.layout.footer-1"));
+        player.sendMessage(messages.color("menu.layout.footer-2"));
+        player.sendMessage(messages.color("menu.layout.footer-3"));
+        player.sendMessage(messages.color("menu.layout.footer-4"));
+        player.sendMessage(messages.color("menu.layout.footer-3"));
+    }
+
+    private static TextComponent selectableStatus(Messages messages, boolean installed, String selectCommand, String resetCommand) {
+        if (installed) {
+            return Component.text(messages.raw("menu.status.installed"))
+                    .color(NamedTextColor.GREEN)
+                    .hoverEvent(Component.text(messages.raw("menu.hover.reset")).color(NamedTextColor.YELLOW))
+                    .clickEvent(ClickEvent.runCommand(resetCommand));
+        }
+
+        return Component.text(messages.raw("menu.status.available"))
+                .color(NamedTextColor.YELLOW)
+                .hoverEvent(Component.text(messages.raw("menu.hover.install")).color(NamedTextColor.YELLOW))
+                .clickEvent(ClickEvent.runCommand(selectCommand));
+    }
+
+    private static TextComponent unavailableStatus(Messages messages) {
+        return Component.text(messages.raw("menu.status.unavailable")).color(NamedTextColor.RED);
+    }
+
+    private static TextComponent buyStatus(Messages messages, int cost, String buyCommand) {
+        return Component.text(messages.raw("menu.labels.buy"))
+                .color(NamedTextColor.GOLD)
+                .append(Component.text(cost + messages.raw("menu.labels.tokens")).color(NamedTextColor.GREEN))
+                .append(Component.text("]").color(NamedTextColor.GOLD))
+                .hoverEvent(Component.text(messages.raw("menu.hover.buy")).color(NamedTextColor.GREEN))
+                .clickEvent(ClickEvent.runCommand(buyCommand));
+    }
+
+    private static TextColor resolveTextColor(String value) {
+        String hex = ColorUtil.normalizeHexColor(value);
+        if (hex != null && hex.length() == 6) {
+            try {
+                int red = Integer.parseInt(hex.substring(0, 2), 16);
+                int green = Integer.parseInt(hex.substring(2, 4), 16);
+                int blue = Integer.parseInt(hex.substring(4, 6), 16);
+                return TextColor.color(red, green, blue);
+            } catch (NumberFormatException ignored) {
+                return TextColor.color(255, 255, 255);
+            }
+        }
+
+        String firstColorCode = ColorUtil.extractFirstColorCode(value);
+        if (firstColorCode.length() >= 2) {
+            char colorCode = Character.toLowerCase(firstColorCode.charAt(1));
+            return mapLegacyColor(colorCode);
+        }
+
+        return TextColor.color(255, 255, 255);
+    }
+
+    private static TextColor mapLegacyColor(char colorCode) {
+        switch (colorCode) {
+            case '0':
+                return TextColor.color(0, 0, 0);
+            case '1':
+                return TextColor.color(0, 0, 170);
+            case '2':
+                return TextColor.color(0, 170, 0);
+            case '3':
+                return TextColor.color(0, 170, 170);
+            case '4':
+                return TextColor.color(170, 0, 0);
+            case '5':
+                return TextColor.color(170, 0, 170);
+            case '6':
+                return TextColor.color(255, 170, 0);
+            case '7':
+                return TextColor.color(170, 170, 170);
+            case '8':
+                return TextColor.color(85, 85, 85);
+            case '9':
+                return TextColor.color(85, 85, 255);
+            case 'a':
+                return TextColor.color(85, 255, 85);
+            case 'b':
+                return TextColor.color(85, 255, 255);
+            case 'c':
+                return TextColor.color(255, 85, 85);
+            case 'd':
+                return TextColor.color(255, 85, 255);
+            case 'e':
+                return TextColor.color(255, 255, 85);
+            case 'f':
+                return TextColor.color(255, 255, 255);
+            default:
+                return TextColor.color(255, 255, 255);
+        }
+    }
+
+    private static String safe(String value) {
+        return value == null ? "" : value;
+    }
+
+    private static List<String> numericKeys(int min, int max) {
+        List<String> keys = new ArrayList<>();
+        for (int value = min; value <= max; value++) {
+            keys.add(String.valueOf(value));
+        }
+        return Collections.unmodifiableList(keys);
+    }
 }
-
-

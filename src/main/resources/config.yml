@@ -1,24 +1,20 @@
-# Плейсхолдеры
+# Команды
+#  - /windesign <TAB>
+
+# Плейс-холдеры
 # - %windesign_bracketscolor% - цвет скобки
 # - %windesign_leftbrackets% - левая скобка
 # - %windesign_rightbrackets% - правая скобка
 # - %windesign_prefixcolor% - цвет префикса
-# - %windesign_prefix% - заменится на установленный игроком префикс
+# - %windesign_prefix% - префикс
 # - %windesign_tabprefixcolor% - цвет префикса + ⚡
 # - %windesign_color% - цвет ника
 # - %windesign_tagcolor% - цвет тега
 # - %windesign_tag% - тег
 
-# Команды плагина:
-# /windesign - главное меню (алиасы: /prefix, /tag, /brackets, /namecolor)
-# /prefix - префикс (select <id>, color select <id>, del)
-# /brackets - скобки (select <id>, color select <id>, buy <id>, del)
-# /tag - тег (select <id>, color select <id>, buy <id>, del)
-# /namecolor - цвет ника (select <id>, del)
+debug: false #Дебаг код
 
-debug: false # true = будет дебаг в консоли
-
-name-colors: # Цвета ника
+name-colors: #Цвета ника
   '1': "§f"
   '2': "§9"
   '3': "§e"
@@ -30,7 +26,7 @@ name-colors: # Цвета ника
   '9': "§c"
   '10': "§4"
 
-prefix-colors: # Цвета префикса
+prefix-colors: #Цвета префикса
   '1': "§x§f§f§f§f§f§f"
   '2': "§x§f§f§f§f§f§f"
   '3': "§x§d§2§d§2§f§f"
@@ -39,7 +35,7 @@ prefix-colors: # Цвета префикса
   '6': "§x§0§0§f§f§f§4"
   '7': "§x§0§0§b§9§f§f"
   '8': "§x§6§7§9§9§f§2"
-  '9': "§x§f§f§8§3§5§2"
+  '9': "§x§F§F§D§5§0§0"
   '10': "§x§f§f§c§5§0§0"
   '11': "§x§e§4§f§f§0§0"
   '12': "§x§5§c§f§f§0§0"
@@ -48,9 +44,9 @@ prefix-colors: # Цвета префикса
   '15': "§x§8§0§0§0§f§f"
   '16': "§x§f§f§0§0§a§f"
   '17': "§x§f§e§0§0§2§d"
-  '18': "§x§c§2§0§0§0§0"
+  '18': "§x§A§E§0§0§0§0"
 
-prefix: # Префиксы
+prefix: #Префиксы
   '1': "Игрок"
   '2': "Барон"
   '3': "Страж"
@@ -63,277 +59,285 @@ prefix: # Префиксы
   '10': "Принц"
   '11': "Князь"
   '12': "Герцог"
-  staff: "Staff"
-  agent: "Агент"
-  techadmin: "Тех.Админ"
-  admin: "Админ"
+  '13': "Спонсор"
+  staff: "Стажёр"
+  agent: "Стафф"
+  techadmin: "Зам.Куратор"
+  admin: "Медиа"
+  '14': "Куратор"
+  '15': "Тех.Админ"
+  '17': "Системщик"
+  '20': "Не.плачь"
+  '21': "Император"
+  '22': "Фрик"
+  '23': "Монарх"
 
-tags-colors: # Настройка цвета тегов
+tags-colors: #Настройка цвета тегов
   '1':
     color: "§f"
-    price: 0
+    summa: 0
   '2':
     color: "§a"
-    price: 790
+    summa: 790
   '3':
     color: "§b"
-    price: 790
+    summa: 790
   '4':
     color: "§c"
-    price: 790
+    summa: 790
   '5':
     color: "§d"
-    price: 790
+    summa: 790
   '6':
     color: "§e"
-    price: 790
+    summa: 790
   '7':
     color: "§f"
-    price: 790
+    summa: 790
   '8':
     color: "§9"
-    price: 790
+    summa: 790
   '9':
     color: "§1"
-    price: 1490
+    summa: 1490
   '10':
     color: "§2"
-    price: 1490
+    summa: 1490
   '11':
     color: "§3"
-    price: 1490
+    summa: 1490
   '12':
     color: "§4"
-    price: 1490
+    summa: 1490
   '13':
     color: "§5"
-    price: 1490
+    summa: 1490
   '14':
     color: "§6"
-    price: 1490
+    summa: 1490
   '15':
     color: "§7"
-    price: 1490
+    summa: 1490
   '16':
     color: "§8"
-    price: 1490
+    summa: 1490
   '17':
     color: "§0"
-    price: 1490
+    summa: 1490
 
-
-# price указывать в токенах, должен стоять плагин PlayerPoints
-# для работы хуйни связанной с покупкой чего-то за токены
-brackets-colors: # Настройка цвета скобок
+brackets-colors: #Настройка цвета скобок
   '1':
     color: "§f"
-    price: 0
+    summa: 0
   '2':
     color: "§a"
-    price: 790
+    summa: 790
   '3':
     color: "§b"
-    price: 790
+    summa: 790
   '4':
     color: "§c"
-    price: 790
+    summa: 790
   '5':
     color: "§d"
-    price: 790
+    summa: 790
   '6':
     color: "§e"
-    price: 790
+    summa: 790
   '7':
     color: "§f"
-    price: 790
+    summa: 790
   '8':
     color: "§9"
-    price: 790
+    summa: 790
   '9':
     color: "§1"
-    price: 1490
+    summa: 1490
   '10':
     color: "§2"
-    price: 1490
+    summa: 1490
   '11':
     color: "§3"
-    price: 1490
+    summa: 1490
   '12':
     color: "§4"
-    price: 1490
+    summa: 1490
   '13':
     color: "§5"
-    price: 1490
+    summa: 1490
   '14':
     color: "§6"
-    price: 1490
+    summa: 1490
   '15':
     color: "§7"
-    price: 1490
+    summa: 1490
   '16':
     color: "§8"
-    price: 1490
+    summa: 1490
   '17':
     color: "§0"
-    price: 1490
+    summa: 1490
 
-brackets: # Настройка скобок
+brackets: #Настройка скобок
   '1':
     left: "["
     right: "]"
-    price: 0
+    summa: 0
   '2':
     left: "("
     right: ")"
-    price: 1390
+    summa: 1390
   '3':
     left: "{"
     right: "}"
-    price: 1390
+    summa: 1390
   '4':
     left: "«"
     right: "»"
-    price: 1390
+    summa: 1390
   '5':
     left: "‹"
     right: "›"
-    price:
+    summa:
   '6':
     left: "❮"
     right: "❯"
-    price: 1680
+    summa: 1680
   '7':
     left: "⧼"
     right: "⧽"
-    price: 1680
+    summa: 1680
   '8':
     left: "≺"
     right: "≻"
-    price: 1680
+    summa: 1680
   '9':
     left: "⟮"
     right: "⟯"
-    price: 1680
+    summa: 1680
   '10':
     left: "❪"
     right: "❫"
-    price: 1680
+    summa: 1680
   '11':
     left: "⎰"
     right: "⎱"
-    price: 1990
+    summa: 1990
   '12':
     left: "⦅"
     right: "⦆"
-    price: 2390
+    summa: 2390
   '13':
     left: "⊰"
     right: "⊱"
-    price: 2590
+    summa: 2590
   '14':
     left: "⟦"
     right: "⟧"
-    price: 2990
+    summa: 2990
   '15':
     left: "⦍"
     right: "⦎"
-    price: 3590
+    summa: 3590
   '16':
     left: "﴾"
     right: "﴿"
-    price: 3590
+    summa: 3590
 
-tags: # Настройка тегов
+tags: #Настройка тегов
   '1':
     name: "Кун"
-    price: 1390
+    summa: 1390
   '2':
     name: "Тян"
-    price: 1390
+    summa: 1390
   '3':
     name: "Кек"
-    price: 1390
+    summa: 1390
   '4':
     name: "Кот"
-    price: 1390
+    summa: 1390
   '5':
     name: "Ору"
-    price: 1390
+    summa: 1390
   '6':
     name: "Зло"
-    price: 1680
+    summa: 1680
   '7':
     name: "Раб"
-    price: 1680
+    summa: 1680
   '8':
     name: "Изи"
-    price: 1680
+    summa: 1680
   '9':
     name: "Фея"
-    price: 1680
+    summa: 1680
   '10':
     name: "Дед"
-    price: 1680
+    summa: 1680
   '11':
     name: "Нуб"
-    price: 1990
+    summa: 1990
   '12':
     name: "Топ"
-    price: 2390
+    summa: 2390
   '13':
     name: "Дэб"
-    price: 2590
+    summa: 2590
   '14':
     name: "Офф"
-    price: 2990
+    summa: 2990
   '15':
     name: "Ауф"
-    price: 3590
+    summa: 3590
   '16':
     name: "Ауе"
-    price: 3590
+    summa: 3590
   '17':
     name: "0iq"
-    price: 3590
+    summa: 3590
   '18':
     name: "Бог"
-    price: 3590
+    summa: 3590
   '19':
     name: "(◑◡◐)"
-    price: 3590
+    summa: 3590
   '20':
     name: "Врун"
-    price: 3590
+    summa: 3590
   '21':
     name: "Дура"
-    price: 3849
+    summa: 3849
   '22':
     name: "Олег"
-    price: 3849
+    summa: 3849
   '23':
     name: "Батя"
-    price: 3849
+    summa: 3849
   '24':
     name: "Дыра"
-    price: 3849
+    summa: 3849
   '25':
     name: "Лоля"
-    price: 3849
+    summa: 3849
   '26':
     name: "Чёрт"
-    price: 4390
+    summa: 4390
   '27':
     name: "БДСМ"
-    price: 4790
+    summa: 4790
   '28':
     name: "Даун"
-    price: 4790
+    summa: 4790
   '29':
     name: "(ಠ_ಠ)"
-    price: 5490
+    summa: 5490
   '30':
     name: "ʕ•ᴥ•ʔ"
-    price: 7490
+    summa: 7490
   '31':
+    name: "Спонсор"
+    summa: 24900
+  '32':
     name: "ЧСВ!"
-    price: 24900
+    summa: 24900

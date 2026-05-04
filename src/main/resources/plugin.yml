@@ -5,10 +5,18 @@ api-version: '1.16'
 depend:
   - LuckPerms
   - PlayerPoints
+softdepend:
+  - TAB
 commands:
   windesign:
   brackets:
   prefix:
   tag:
   namecolor:
+
+permissions:
+  windesign.admin:
+    default: op
+  windesign.admin.clear:
+    default: op
 

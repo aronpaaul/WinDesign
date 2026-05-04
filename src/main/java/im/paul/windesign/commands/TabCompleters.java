@@ -2,9 +2,11 @@ package im.paul.windesign.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 /**
  * Таб-комплитер для команд WinDesign.
@@ -23,14 +25,52 @@ public class TabCompleters implements TabCompleter {
       String cmdName = cmd.getName().toLowerCase();
       ArrayList completions = new ArrayList();
       if (cmdName.equals("windesign")) {
-         completions.add("tags");
-         completions.add("prefix");
-         completions.add("brackets");
-         completions.add("namecolor");
-         completions.add("tagscolor");
-         completions.add("prefixcolor");
-         completions.add("bracketscolor");
-         return completions;
+         if (args.length == 1) {
+            completions.add("tags");
+            completions.add("prefix");
+            completions.add("brackets");
+            completions.add("namecolor");
+            completions.add("tagscolor");
+            completions.add("prefixcolor");
+            completions.add("bracketscolor");
+            if (sender.hasPermission("windesign.admin")) {
+               completions.add("admin");
+            }
+            if (sender.hasPermission("windesign.admin.clear")) {
+               completions.add("clear");
+            }
+            return completions;
+         }
+
+         if (args.length == 2 && args[0].equalsIgnoreCase("admin") && sender.hasPermission("windesign.admin")) {
+            completions.add("tag");
+            return completions;
+         }
+
+         if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("tag")
+                 && sender.hasPermission("windesign.admin")) {
+            completions.add("set");
+            return completions;
+         }
+
+         if (args.length == 2 && args[0].equalsIgnoreCase("clear")) {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+               completions.add(onlinePlayer.getName());
+            }
+            return completions;
+         }
+
+         if (args.length == 3 && args[0].equalsIgnoreCase("clear")) {
+            completions.add("namecolor");
+            completions.add("tag");
+            completions.add("tagcolor");
+            completions.add("prefix");
+            completions.add("prefixcolor");
+            completions.add("brackets");
+            completions.add("bracketscolor");
+            completions.add("all");
+            return completions;
+         }
       }
 
       if (cmdName.equals("brackets")) {

@@ -1,0 +1,418 @@
+#
+# Настройка слотов меню:
+# 1) Отключить слот:
+#    enabled: false
+# 2) Переместить слот:
+#    поменяй номер блока ('1', '2', '3'...) у нужного item.
+# 3) item = ключ оформления из config.yml:
+#    - для tags/tagscolor/brackets/bracketscolor/namecolor: обычно число
+#    - для prefix: число или staff/agent/techadmin/admin
+#
+messages:
+  design-type-disabled: "&#FC0000Данный тип дизайна отключен."
+
+design-types:
+  namecolor: true
+  prefix: true
+  prefixcolor: true
+  tags: true
+  tagscolor: true
+  brackets: true
+  bracketscolor: true
+
+menus:
+  namecolor:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+  prefix:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+      '11':
+        item: "11"
+        enabled: true
+      '12':
+        item: "12"
+        enabled: true
+      '13':
+        item: "13"
+        enabled: true
+      '14':
+        item: "staff"
+        enabled: true
+      '15':
+        item: "agent"
+        enabled: true
+      '16':
+        item: "techadmin"
+        enabled: true
+      '17':
+        item: "admin"
+        enabled: true
+  prefixcolor:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+      '11':
+        item: "11"
+        enabled: true
+      '12':
+        item: "12"
+        enabled: true
+      '13':
+        item: "13"
+        enabled: true
+      '14':
+        item: "14"
+        enabled: true
+      '15':
+        item: "15"
+        enabled: true
+      '16':
+        item: "16"
+        enabled: true
+      '17':
+        item: "17"
+        enabled: true
+      '18':
+        item: "18"
+        enabled: true
+  tags:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+      '11':
+        item: "11"
+        enabled: true
+      '12':
+        item: "12"
+        enabled: true
+      '13':
+        item: "13"
+        enabled: true
+      '14':
+        item: "14"
+        enabled: true
+      '15':
+        item: "15"
+        enabled: true
+      '16':
+        item: "16"
+        enabled: true
+      '17':
+        item: "17"
+        enabled: true
+      '18':
+        item: "18"
+        enabled: true
+      '19':
+        item: "19"
+        enabled: true
+      '20':
+        item: "20"
+        enabled: true
+      '21':
+        item: "21"
+        enabled: true
+      '22':
+        item: "22"
+        enabled: true
+      '23':
+        item: "23"
+        enabled: true
+      '24':
+        item: "24"
+        enabled: true
+      '25':
+        item: "25"
+        enabled: true
+      '26':
+        item: "26"
+        enabled: true
+      '27':
+        item: "27"
+        enabled: true
+      '28':
+        item: "28"
+        enabled: true
+      '29':
+        item: "29"
+        enabled: true
+      '30':
+        item: "30"
+        enabled: true
+      '31':
+        item: "31"
+        enabled: true
+      '32':
+        item: "32"
+        enabled: true
+  tagscolor:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+      '11':
+        item: "11"
+        enabled: true
+      '12':
+        item: "12"
+        enabled: true
+      '13':
+        item: "13"
+        enabled: true
+      '14':
+        item: "14"
+        enabled: true
+      '15':
+        item: "15"
+        enabled: true
+      '16':
+        item: "16"
+        enabled: true
+      '17':
+        item: "17"
+        enabled: true
+  brackets:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+      '11':
+        item: "11"
+        enabled: true
+      '12':
+        item: "12"
+        enabled: true
+      '13':
+        item: "13"
+        enabled: true
+      '14':
+        item: "14"
+        enabled: true
+      '15':
+        item: "15"
+        enabled: true
+      '16':
+        item: "16"
+        enabled: true
+  bracketscolor:
+    slots:
+      '1':
+        item: "1"
+        enabled: true
+      '2':
+        item: "2"
+        enabled: true
+      '3':
+        item: "3"
+        enabled: true
+      '4':
+        item: "4"
+        enabled: true
+      '5':
+        item: "5"
+        enabled: true
+      '6':
+        item: "6"
+        enabled: true
+      '7':
+        item: "7"
+        enabled: true
+      '8':
+        item: "8"
+        enabled: true
+      '9':
+        item: "9"
+        enabled: true
+      '10':
+        item: "10"
+        enabled: true
+      '11':
+        item: "11"
+        enabled: true
+      '12':
+        item: "12"
+        enabled: true
+      '13':
+        item: "13"
+        enabled: true
+      '14':
+        item: "14"
+        enabled: true
+      '15':
+        item: "15"
+        enabled: true
+      '16':
+        item: "16"
+        enabled: true
+      '17':
+        item: "17"
+        enabled: true

@@ -10,6 +10,7 @@ import im.paul.windesign.hooks.luckperms.LuckPermsHook;
 import im.paul.windesign.hooks.playerpoints.PlayerPointsHook;
 import im.paul.windesign.listeners.PlayerDataListener;
 import im.paul.windesign.placeholders.BracketsPlaceholderExpansion;
+import im.paul.windesign.util.MenuSettings;
 import im.paul.windesign.util.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,15 +30,17 @@ public final class WinDesign extends JavaPlugin {
     private JsonDesignStore jsonDesignStore;
     private DesignService designService;
     private Messages messages;
+    private MenuSettings menuSettings;
 
     /**
      * Инициализирует плагин, сервисы, команды и слушатели.
      */
     public void onEnable() {
-        this.debug = this.getConfig().getBoolean("debug");
         instance = this;
         this.saveDefaultConfig();
+        this.debug = this.getConfig().getBoolean("debug");
         this.messages = new Messages(this);
+        this.menuSettings = new MenuSettings(this);
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             this.bracketsPlaceholderExpansion = new BracketsPlaceholderExpansion(this);
             this.bracketsPlaceholderExpansion.register();
@@ -118,6 +121,10 @@ public final class WinDesign extends JavaPlugin {
         return this.messages;
     }
 
+    public MenuSettings getMenuSettings() {
+        return this.menuSettings;
+    }
+
     /**
      * Возвращает цвет ника игрока.
      *
@@ -146,6 +153,17 @@ public final class WinDesign extends JavaPlugin {
      */
     public void setPlayerColor(Player player, String colorKey) {
         this.designService.setPlayerColor(player, colorKey);
+    }
+
+    /**
+     * API: устанавливает игроку кастомный HEX-цвет ника.
+     *
+     * @param playerName ник игрока
+     * @param hexColor HEX-цвет (RRGGBB, #RRGGBB или &#RRGGBB)
+     * @return true если цвет валиден и успешно применён
+     */
+    public boolean setPlayerCustomNameColor(String playerName, String hexColor) {
+        return this.designService.setPlayerCustomNameColor(playerName, hexColor);
     }
 
     /**

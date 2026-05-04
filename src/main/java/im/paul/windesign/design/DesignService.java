@@ -7,9 +7,11 @@ import im.paul.windesign.design.service.BracketsService;
 import im.paul.windesign.design.service.NameColorService;
 import im.paul.windesign.design.service.PrefixService;
 import im.paul.windesign.design.service.TagService;
+import im.paul.windesign.design.service.TabTitleService;
 import im.paul.windesign.design.state.DesignState;
 import im.paul.windesign.hooks.luckperms.LuckPermsHook;
 import im.paul.windesign.hooks.playerpoints.PlayerPointsHook;
+import java.util.Locale;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +24,7 @@ public class DesignService {
     private final NameColorService nameColorService;
     private final PrefixService prefixService;
     private final TagService tagService;
+    private final TabTitleService tabTitleService;
     private final BracketsService bracketsService;
     private final LuckPermsHook luckPermsHook;
     private final PlayerPointsHook playerPointsHook;
@@ -45,6 +48,7 @@ public class DesignService {
         this.nameColorService = new NameColorService(plugin, this.state, this.persistenceService);
         this.prefixService = new PrefixService(plugin, this.state, this.persistenceService, luckPermsHook);
         this.tagService = new TagService(plugin, this.state, this.persistenceService);
+        this.tabTitleService = new TabTitleService(plugin);
         this.bracketsService = new BracketsService(plugin, this.state, this.persistenceService);
     }
 
@@ -117,6 +121,22 @@ public class DesignService {
      */
     public void setPlayerColor(Player player, String colorKey) {
         this.nameColorService.setPlayerColor(player, colorKey);
+    }
+
+    /**
+     * Устанавливает кастомный HEX-цвет ника по имени игрока.
+     *
+     * @param playerName ник игрока
+     * @param hexColor HEX-цвет (RRGGBB, #RRGGBB или &#RRGGBB)
+     * @return true если цвет валиден и сохранён
+     */
+    public boolean setPlayerCustomNameColor(String playerName, String hexColor) {
+        if (playerName == null || playerName.trim().isEmpty()) {
+            return false;
+        }
+
+        this.loadPlayerData(playerName);
+        return this.nameColorService.setPlayerCustomColor(playerName, hexColor);
     }
 
     /**
@@ -360,6 +380,27 @@ public class DesignService {
     }
 
     /**
+     * Устанавливает кастомный титул игрока только в TAB.
+     *
+     * @param playerName ник игрока
+     * @param title текст титула
+     * @return результат выполнения команды TAB
+     */
+    public TabTitleService.Result setPlayerCustomTabTitle(String playerName, String title) {
+        return this.tabTitleService.setPlayerTabTitle(playerName, title);
+    }
+
+    /**
+     * Удаляет кастомный титул игрока только в TAB.
+     *
+     * @param playerName ник игрока
+     * @return результат выполнения команды TAB
+     */
+    public TabTitleService.Result clearPlayerCustomTabTitle(String playerName) {
+        return this.tabTitleService.clearPlayerTabTitle(playerName);
+    }
+
+    /**
      * Возвращает левую скобку игрока.
      *
      * @param player игрок
@@ -427,6 +468,57 @@ public class DesignService {
      */
     public void setPlayerBracketsColor(Player player, String colorKey) {
         this.bracketsService.setPlayerBracketsColor(player, colorKey);
+    }
+
+    /**
+     * Сбрасывает конкретный тип дизайна игрока к дефолтному состоянию и сохраняет изменения в БД.
+     *
+     * @param playerName ник игрока
+     * @param designType тип дизайна
+     * @return true если тип поддерживается и очистка выполнена
+     */
+    public boolean clearPlayerDesignType(String playerName, String designType) {
+        if (playerName == null || playerName.trim().isEmpty() || designType == null) {
+            return false;
+        }
+
+        String normalizedType = designType.toLowerCase(Locale.ROOT);
+        this.loadPlayerData(playerName);
+
+        if (normalizedType.equals("namecolor")) {
+            this.state.setNameColorKey(playerName, "1");
+        } else if (normalizedType.equals("tag")) {
+            this.state.setTagKey(playerName, null);
+            this.clearPlayerCustomTabTitle(playerName);
+        } else if (normalizedType.equals("tagcolor")) {
+            this.state.setTagColorKey(playerName, "1");
+        } else if (normalizedType.equals("prefix")) {
+            this.state.setPrefixKey(playerName, null);
+            this.state.setPrefixCustomValue(playerName, null);
+        } else if (normalizedType.equals("prefixcolor")) {
+            this.state.setPrefixColorKey(playerName, null);
+            this.state.setPrefixColorCustomValue(playerName, null);
+        } else if (normalizedType.equals("brackets")) {
+            this.state.setBracketsKey(playerName, "1");
+        } else if (normalizedType.equals("bracketscolor")) {
+            this.state.setBracketsColorKey(playerName, "1");
+        } else if (normalizedType.equals("all")) {
+            this.state.setNameColorKey(playerName, "1");
+            this.state.setTagKey(playerName, null);
+            this.clearPlayerCustomTabTitle(playerName);
+            this.state.setTagColorKey(playerName, "1");
+            this.state.setPrefixKey(playerName, null);
+            this.state.setPrefixCustomValue(playerName, null);
+            this.state.setPrefixColorKey(playerName, null);
+            this.state.setPrefixColorCustomValue(playerName, null);
+            this.state.setBracketsKey(playerName, "1");
+            this.state.setBracketsColorKey(playerName, "1");
+        } else {
+            return false;
+        }
+
+        this.savePlayerData(playerName);
+        return true;
     }
 }
 
