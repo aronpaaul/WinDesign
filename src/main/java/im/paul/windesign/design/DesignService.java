@@ -67,12 +67,16 @@ public class DesignService {
     }
 
     /**
-     * Загружает данные игрока в память.
+     * Загружает данные игрока в память и применяет кастомный тег в TAB.
      *
      * @param playerName ник игрока
      */
     public void loadPlayerData(String playerName) {
         this.persistenceService.loadPlayerData(playerName);
+        String customTag = this.state.getCustomTag(playerName);
+        if (customTag != null) {
+            this.tabTitleService.setPlayerTabTitle(playerName, customTag);
+        }
     }
 
     /**
@@ -397,7 +401,7 @@ public class DesignService {
      * @param value текст тега
      */
     public void setPlayerCustomTag(String playerName, String value) {
-        this.loadPlayerData(playerName);
+        this.persistenceService.loadPlayerData(playerName);
         this.tagService.setCustomTag(playerName, value);
     }
 
@@ -407,7 +411,7 @@ public class DesignService {
      * @param playerName ник игрока
      */
     public void clearPlayerCustomTag(String playerName) {
-        this.loadPlayerData(playerName);
+        this.persistenceService.loadPlayerData(playerName);
         this.tagService.clearCustomTag(playerName);
     }
 
