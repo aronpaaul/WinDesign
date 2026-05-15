@@ -391,6 +391,27 @@ public class DesignService {
     }
 
     /**
+     * Устанавливает кастомный админский тег игрока (для чата и TAB).
+     *
+     * @param playerName ник игрока
+     * @param value текст тега
+     */
+    public void setPlayerCustomTag(String playerName, String value) {
+        this.loadPlayerData(playerName);
+        this.tagService.setCustomTag(playerName, value);
+    }
+
+    /**
+     * Удаляет кастомный админский тег игрока.
+     *
+     * @param playerName ник игрока
+     */
+    public void clearPlayerCustomTag(String playerName) {
+        this.loadPlayerData(playerName);
+        this.tagService.clearCustomTag(playerName);
+    }
+
+    /**
      * Удаляет кастомный титул игрока только в TAB.
      *
      * @param playerName ник игрока
@@ -489,6 +510,7 @@ public class DesignService {
             this.state.setNameColorKey(playerName, "1");
         } else if (normalizedType.equals("tag")) {
             this.state.setTagKey(playerName, null);
+            this.state.setCustomTag(playerName, null);
             this.clearPlayerCustomTabTitle(playerName);
         } else if (normalizedType.equals("tagcolor")) {
             this.state.setTagColorKey(playerName, "1");
@@ -505,6 +527,7 @@ public class DesignService {
         } else if (normalizedType.equals("all")) {
             this.state.setNameColorKey(playerName, "1");
             this.state.setTagKey(playerName, null);
+            this.state.setCustomTag(playerName, null);
             this.clearPlayerCustomTabTitle(playerName);
             this.state.setTagColorKey(playerName, "1");
             this.state.setPrefixKey(playerName, null);

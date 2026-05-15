@@ -13,6 +13,7 @@ public class PlayerDesign {
     private final String prefixColor;
     private final String prefixCustom;
     private final String prefixColorCustom;
+    private final String customTag;
 
     /**
      * Создаёт объект данных дизайна игрока.
@@ -26,9 +27,10 @@ public class PlayerDesign {
      * @param prefixColor цвет префикса
      * @param prefixCustom флаг кастомного префикса
      * @param prefixColorCustom флаг кастомного цвета префикса
+     * @param customTag кастомный админский тег
      */
     public PlayerDesign(String nameColor, String tag, String tagColor, String prefix, String brackets, String bracketsColor,
-                        String prefixColor, String prefixCustom, String prefixColorCustom) {
+                        String prefixColor, String prefixCustom, String prefixColorCustom, String customTag) {
         this.nameColor = nameColor;
         this.tag = tag;
         this.tagColor = tagColor;
@@ -38,6 +40,7 @@ public class PlayerDesign {
         this.prefixColor = prefixColor;
         this.prefixCustom = prefixCustom;
         this.prefixColorCustom = prefixColorCustom;
+        this.customTag = customTag;
     }
 
     /**
@@ -119,6 +122,15 @@ public class PlayerDesign {
      */
     public String getPrefixColorCustom() {
         return this.prefixColorCustom;
+    }
+
+    /**
+     * Возвращает кастомный админский тег.
+     *
+     * @return текст тега
+     */
+    public String getCustomTag() {
+        return this.customTag;
     }
 }
 

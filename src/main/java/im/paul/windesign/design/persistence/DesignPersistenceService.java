@@ -157,7 +157,8 @@ public class DesignPersistenceService {
                 this.state.getBracketsColorKey(playerName),
                 this.state.getPrefixColorKey(playerName),
                 this.state.getPrefixCustomValue(playerName),
-                this.state.getPrefixColorCustomValue(playerName)
+                this.state.getPrefixColorCustomValue(playerName),
+                this.state.getCustomTag(playerName)
         );
     }
 
@@ -171,6 +172,7 @@ public class DesignPersistenceService {
         this.state.setPrefixColorKey(playerName, design.getPrefixColor());
         this.state.setPrefixCustomValue(playerName, design.getPrefixCustom());
         this.state.setPrefixColorCustomValue(playerName, design.getPrefixColorCustom());
+        this.state.setCustomTag(playerName, design.getCustomTag());
     }
 
     private void applyMap(Map<String, String> map, BiConsumer<String, String> setter) {

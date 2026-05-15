@@ -50,8 +50,10 @@ public class DatabaseManager {
                         "brackets_color TEXT," +
                         "prefix_color TEXT," +
                         "prefix_custom TEXT," +
-                        "prefix_color_custom TEXT" +
+                        "prefix_color_custom TEXT," +
+                        "custom_tag TEXT" +
                         ")");
+                this.migrateAddColumn(statement, "custom_tag");
             }
         } catch (SQLException e) {
             this.plugin.getLogger().severe("WinDesign » Ошибка инициализации базы данных SQLite.");
@@ -85,6 +87,13 @@ public class DatabaseManager {
                     this.plugin.getLogger().warning("WinDesign » Ошибка закрытия базы данных SQLite.");
                 }
             }
+        }
+    }
+
+    private void migrateAddColumn(Statement statement, String columnName) {
+        try {
+            statement.executeUpdate("ALTER TABLE player_designs ADD COLUMN " + columnName + " TEXT");
+        } catch (SQLException ignored) {
         }
     }
 }

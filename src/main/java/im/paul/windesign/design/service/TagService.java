@@ -27,17 +27,22 @@ public class TagService {
      * @return true если тег установлен
      */
     public boolean hasCustomTag(Player player) {
-        return this.state.hasTag(player.getName());
+        String playerName = player.getName();
+        return this.state.hasCustomTag(playerName) || this.state.hasTag(playerName);
     }
 
     /**
      * Возвращает текущий тег игрока.
+     * Кастомный админский тег имеет приоритет над донатным.
      *
      * @param player игрок
      * @return тег или null
      */
     public String getPlayerTag(Player player) {
         String playerName = player.getName();
+        if (this.state.hasCustomTag(playerName)) {
+            return this.state.getCustomTag(playerName);
+        }
         if (this.state.hasTag(playerName)) {
             FileConfiguration config = this.plugin.getConfig();
             String key = this.state.getTagKey(playerName);
@@ -106,6 +111,27 @@ public class TagService {
     public void setPlayerTagColor(Player player, String colorKey) {
         String playerName = player.getName();
         this.state.setTagColorKey(playerName, colorKey);
+        this.persistenceService.savePlayerData(playerName);
+    }
+
+    /**
+     * Устанавливает кастомный админский тег.
+     *
+     * @param playerName ник игрока
+     * @param value текст тега
+     */
+    public void setCustomTag(String playerName, String value) {
+        this.state.setCustomTag(playerName, value);
+        this.persistenceService.savePlayerData(playerName);
+    }
+
+    /**
+     * Удаляет кастомный админский тег.
+     *
+     * @param playerName ник игрока
+     */
+    public void clearCustomTag(String playerName) {
+        this.state.setCustomTag(playerName, null);
         this.persistenceService.savePlayerData(playerName);
     }
 }

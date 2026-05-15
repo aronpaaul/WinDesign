@@ -18,6 +18,7 @@ public class DesignState {
     private final Map<String, String> playerPrefixColor = new HashMap<>();
     private final Map<String, String> playerPrefixCustom = new HashMap<>();
     private final Map<String, String> playerPrefixColorCustom = new HashMap<>();
+    private final Map<String, String> playerCustomTag = new HashMap<>();
 
     /**
      * Проверяет, задан ли цвет ника.
@@ -140,6 +141,36 @@ public class DesignState {
     }
 
     /**
+     * Проверяет, установлен ли кастомный админский тег.
+     *
+     * @param playerName ник игрока
+     * @return true если кастомный тег задан
+     */
+    public boolean hasCustomTag(String playerName) {
+        return this.playerCustomTag.containsKey(playerName);
+    }
+
+    /**
+     * Возвращает кастомный админский тег.
+     *
+     * @param playerName ник игрока
+     * @return текст тега или null
+     */
+    public String getCustomTag(String playerName) {
+        return this.playerCustomTag.get(playerName);
+    }
+
+    /**
+     * Устанавливает кастомный админский тег.
+     *
+     * @param playerName ник игрока
+     * @param value текст тега
+     */
+    public void setCustomTag(String playerName, String value) {
+        this.putOrRemove(this.playerCustomTag, playerName, value);
+    }
+
+    /**
      * Проверяет, установлен ли кастомный префикс.
      *
      * @param playerName ник игрока
@@ -252,6 +283,7 @@ public class DesignState {
         this.playerPrefixColorCustom.remove(playerName);
         this.playerTags.remove(playerName);
         this.playerTagsColor.remove(playerName);
+        this.playerCustomTag.remove(playerName);
         this.playerBrackets.remove(playerName);
         this.playerBracketsColor.remove(playerName);
     }
@@ -267,6 +299,7 @@ public class DesignState {
         this.playerPrefixColorCustom.clear();
         this.playerTags.clear();
         this.playerTagsColor.clear();
+        this.playerCustomTag.clear();
         this.playerBrackets.clear();
         this.playerBracketsColor.clear();
     }
@@ -285,6 +318,7 @@ public class DesignState {
         playerNames.addAll(this.playerPrefixColorCustom.keySet());
         playerNames.addAll(this.playerTags.keySet());
         playerNames.addAll(this.playerTagsColor.keySet());
+        playerNames.addAll(this.playerCustomTag.keySet());
         playerNames.addAll(this.playerBrackets.keySet());
         playerNames.addAll(this.playerBracketsColor.keySet());
         return playerNames;

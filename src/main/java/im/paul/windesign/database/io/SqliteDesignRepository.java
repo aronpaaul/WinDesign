@@ -54,8 +54,8 @@ public class SqliteDesignRepository {
      */
     public void save(String playerName, PlayerDesign design) throws SQLException {
         try (PreparedStatement statement = this.databaseManager.getConnection().prepareStatement(
-                "INSERT INTO player_designs (player_name, name_color, tag, tag_color, prefix, brackets, brackets_color, prefix_color, prefix_custom, prefix_color_custom) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "INSERT INTO player_designs (player_name, name_color, tag, tag_color, prefix, brackets, brackets_color, prefix_color, prefix_custom, prefix_color_custom, custom_tag) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                         "ON CONFLICT(player_name) DO UPDATE SET " +
                         "name_color=excluded.name_color, " +
                         "tag=excluded.tag, " +
@@ -65,7 +65,8 @@ public class SqliteDesignRepository {
                         "brackets_color=excluded.brackets_color, " +
                         "prefix_color=excluded.prefix_color, " +
                         "prefix_custom=excluded.prefix_custom, " +
-                        "prefix_color_custom=excluded.prefix_color_custom")) {
+                        "prefix_color_custom=excluded.prefix_color_custom, " +
+                        "custom_tag=excluded.custom_tag")) {
             statement.setString(1, playerName);
             statement.setString(2, design.getNameColor());
             statement.setString(3, design.getTag());
@@ -76,6 +77,7 @@ public class SqliteDesignRepository {
             statement.setString(8, design.getPrefixColor());
             statement.setString(9, design.getPrefixCustom());
             statement.setString(10, design.getPrefixColorCustom());
+            statement.setString(11, design.getCustomTag());
             statement.executeUpdate();
         }
     }
@@ -90,7 +92,7 @@ public class SqliteDesignRepository {
      */
     public PlayerDesign load(String playerName) throws SQLException {
         try (PreparedStatement statement = this.databaseManager.getConnection().prepareStatement(
-                "SELECT name_color, tag, tag_color, prefix, brackets, brackets_color, prefix_color, prefix_custom, prefix_color_custom " +
+                "SELECT name_color, tag, tag_color, prefix, brackets, brackets_color, prefix_color, prefix_custom, prefix_color_custom, custom_tag " +
                         "FROM player_designs WHERE player_name=?")) {
             statement.setString(1, playerName);
 
@@ -105,7 +107,8 @@ public class SqliteDesignRepository {
                             resultSet.getString("brackets_color"),
                             resultSet.getString("prefix_color"),
                             resultSet.getString("prefix_custom"),
-                            resultSet.getString("prefix_color_custom")
+                            resultSet.getString("prefix_color_custom"),
+                            resultSet.getString("custom_tag")
                     );
                 }
             }
